@@ -15,7 +15,8 @@ const CryptocurrencyCard = () => {
       {isSuccess && (
         <div>
           <p>
-            <span className="text-primary font-semibold">Time Updated :</span> {new Date(data?.time.updated).toLocaleDateString()}{" "}
+            <span className="text-primary font-semibold">Time Updated :</span>{" "}
+            {new Date(data?.time.updated).toLocaleDateString()}{" "}
             {new Date(data?.time.updated).toLocaleTimeString()}
           </p>
           <div className="flex flex-wrap gap-2 mt-3">
@@ -26,14 +27,18 @@ const CryptocurrencyCard = () => {
                   key={index}
                   className="bg-[#171717] p-4 rounded-lg w-[250px] space-y-3"
                 >
+                  <p
+                    dangerouslySetInnerHTML={{ __html: currentObj.symbol }}
+                    className="text-primary bg-[#333333] w-12 h-12 text-2xl font-bold flex justify-center items-center pb-1 rounded-full"
+                  />
                   <p className="text-lg font-semibold">
                     {currentObj?.description}
                   </p>
-                  <p>Rate: {currentObj?.rate}</p>
-                  <div className="flex gap-2">
-                    <p>1 BTC</p>
-                    <ArrowRightLeft className="w-4 text-primary" />
-                    <p>
+                  {/* <p>Rate: {currentObj?.rate}</p> */}
+                  <div className="flex gap-2 items-center">
+                    <p className="bg-[#333333] px-3 rounded py-1">1 BTC</p>
+                    <ArrowRightLeft className="w-5 text-primary" />
+                    <p className="bg-[#333333] px-3 rounded py-1">
                       <span
                         dangerouslySetInnerHTML={{ __html: currentObj.symbol }}
                         className="font-semibold"
