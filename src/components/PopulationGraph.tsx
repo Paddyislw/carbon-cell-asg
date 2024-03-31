@@ -4,7 +4,8 @@ import * as echarts from "echarts";
 import { formatNumber } from "../utils/helperFunction";
 
 const PopulationGraph = () => {
-  const { data, isSuccess, isError } = useGetPopulationData();
+  const { data, isSuccess, isError, isLoading, isFetching } =
+    useGetPopulationData();
   console.log("data.....", data);
   const { years, populations, nations, originalData } = data || {};
   const lineChartRef = useRef(null);
@@ -111,6 +112,7 @@ const PopulationGraph = () => {
   }, [data, isSuccess]);
 
   useEffect(() => {
+    if (!isSuccess) return;
     const lineChart = echarts.init(lineChartRef.current);
     const pieChart = echarts.init(pieChartRef.current);
     if (optionsForLine && optionsForPie) {
@@ -122,20 +124,30 @@ const PopulationGraph = () => {
   return (
     <div>
       {isError && <p>Something went wrong from fetching population data</p>}
-      <div className="flex gap-2 flex-wrap">
-        <div
-          ref={lineChartRef}
-          style={{ width: "600px", height: "400px" }}
-          id="chart-container"
-          className="mt-6 bg-[#171717] pt-3 px-2 rounded-lg shadow"
-        />
-        <div
-          ref={pieChartRef}
-          style={{ width: "600px", height: "400px" }}
-          id="chart-container"
-          className="mt-6 bg-[#171717] pt-3 px-2 rounded-lg shadow"
-        />
-      </div>
+      {(isLoading || isFetching) && (
+        <div className="flex gap-2 flex-wrap">
+          <div className="mt-6 bg-[#171717] pt-3 px-2 rounded-lg shadow w-[600px] h-[400px] flex justify-center items-center">
+            <div className="w-16 h-16 border-t-primary border-4 rounded-full animate-spin my-3"></div>
+          </div>
+          <div className="mt-6 bg-[#171717] pt-3 px-2 rounded-lg shadow w-[600px] h-[400px] flex justify-center items-center">
+            <div className="w-16 h-16 border-t-primary border-4 rounded-full animate-spin my-3"></div>
+          </div>
+        </div>
+      )}
+      {isSuccess && (
+        <div className="flex gap-2 flex-wrap">
+          <div
+            ref={lineChartRef}
+            style={{ width: "600px", height: "400px" }}
+            className="mt-6 bg-[#171717] pt-3 px-2 rounded-lg shadow"
+          />
+          <div
+            ref={pieChartRef}
+            style={{ width: "600px", height: "400px" }}
+            className="mt-6 bg-[#171717] pt-3 px-2 rounded-lg shadow"
+          />
+        </div>
+      )}
     </div>
   );
 };
